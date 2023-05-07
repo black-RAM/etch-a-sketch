@@ -1,0 +1,11 @@
+/* revert pesky margins */
+body{
+  margin: 0;
+}
+main {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("assets/toy-story-cloud.jpg");
+  background-size: 400px;
+  background-repeat: repeat;
+}
