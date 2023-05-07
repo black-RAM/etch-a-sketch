@@ -18,6 +18,13 @@ body {
 #etch {
   width: 90vw;
   height: 90vh;
-  background-color: hsl(358, 75%, 45%);
+  background-color: hsl(1, 100%, 70%);
   border-radius: 30px;
+}
+#etch > h1 {
+  font-family: 'lobster', cursive;
+  font-size: 60px;
+  color: hsl(53, 100%, 70%);
+  text-align: center;
+  margin: 10px;
 }
