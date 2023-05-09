@@ -13,6 +13,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 /* main etch-a-sketch */
 #etch {
@@ -20,11 +21,25 @@ body {
   height: 90vh;
   background-color: hsl(1, 100%, 70%);
   border-radius: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 #etch > h1 {
   font-family: 'lobster', cursive;
-  font-size: 60px;
+  font-size: min(65px, 15vw);
   color: hsl(53, 100%, 70%);
   text-align: center;
   margin: 10px;
+}
+#container {
+  background-color: white;
+  width: 95%;
+  height: 70%;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+}
+.grid-element {
+  border: 1px solid black;
+  aspect-ratio: 1 / 1;
 }
