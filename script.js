@@ -1,42 +1,63 @@
 // viewport dimensions
 let [vw, vh] = [window.innerWidth, window.innerHeight];
-let [vwu, vhu] = [vw / 100, vh/100]; // viewport width|height unit
-// adjust viewport dimension's variables on resize
-window.addEventListener('resize', () => {
-  [vw, vh] = [window.innerWidth, window.innerHeight];
-  [vwu, vhu] = [vw / 100, vh/100];
-  location.reload();
-})
+let [vwu, vhu] = [vw / 100, vh / 100]; // viewport width|height unit
 
-/* grid creation is in function to more easily control parameters. Parameters:
-res = resolution =  number of columns. Named as such because 
-higher column number = smaller "pixels" = higher "resolution".
-ratio = aspect ratio; 1:1 input as [1, 1] */
-
+// grid creation function
 function createGrid(res, ratio) {
   const [w, h] = ratio; // divide ratio into width and height variables
 
-  let grid = document.getElementById('grid-container'); 
+  let grid = document.getElementById('grid-container'); // retrieve grid container
 
-  // for portrait orientation (like on tablets), 
+  // Clear existing grid content (which may be there if this function is called by handleResize())
+  while (grid.firstChild) {
+    grid.removeChild(grid.firstChild);
+  }
+
+  // initialized in function scope to avoid reference errors and verbosity
+  let gridWidth = 0;
+  let gridHeight = 0;
+  // for portrait orientation (like on tablets),
   let isPortrait = vw < vh;
-  if(isPortrait) {
+  if (isPortrait) {
     // manipulate height to achieve desired aspect ratio (rather than going wide and overflowing)
-    grid.style.width = `${90 * vwu}px`;
-    grid.style.height = `${90*vwu / w * h}px`
+    gridWidth = 90 * vwu;
+    grid.style.width = `${gridWidth}px`;
+    
+    gridHeight = 90 * vwu / w * h;
+    grid.style.minHeight = `${gridHeight}px`;
   } else {
-    // else manipulate width (more convenient as user can see whole board)
-    grid.style.height = `${90*vhu}px`;
-    grid.style.width = `${90*vhu / h * w}px`;
+    // else manipulate width (more convenient as user can see the whole board)
+    gridHeight = 75 * vhu;
+    grid.style.minHeight = `${gridHeight}px`;
+    
+    gridWidth = 75 * vhu / h * w;
+    grid.style.width = `${gridWidth}px`;
   }
   
-  grid.style.gridTemplateColumns = `repeat(${res}, auto)`;
-
-  for(let i = 0; i < res*6; i++) {
-    let gridElement = document.createElement('div');
-    gridElement.classList.add('grid-element');
-    grid.appendChild(gridElement)
+  const columnWidth = gridWidth / res;
+  grid.style.gridTemplateColumns = `repeat(${res}, ${columnWidth}px)`;
+  
+  // loop to actually create the grid
+  let spaceLeft = gridHeight;
+  while(spaceLeft > 0) {
+    // create rows
+    for (let i = 0; i < res; i++) {
+      let gridElement = document.createElement('div');
+      gridElement.classList.add('grid-element');
+      gridElement.style.height = `${columnWidth}px`; // make the elements perfect squares
+      grid.appendChild(gridElement);
+    }
+    spaceLeft-=columnWidth;
   }
 }
-
+// initial grid creation
 createGrid(10, [1, 1]);
+
+// function to handle resize event
+function handleResize() {
+  [vw, vh] = [window.innerWidth, window.innerHeight];
+  [vwu, vhu] = [vw / 100, vh / 100];
+  createGrid(10, [1, 1]); // adjust the arguments as per your needs
+}
+// add resize event listener
+window.addEventListener('resize', handleResize);

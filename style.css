@@ -34,8 +34,6 @@ body {
 }
 #grid-container {
   background-color: white;
-  width: 95%;
-  min-height: 70%;
   display: grid;
 }
 .grid-element {
