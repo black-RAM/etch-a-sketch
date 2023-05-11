@@ -51,13 +51,13 @@ function createGrid(res, ratio) {
   }
 }
 // initial grid creation
-createGrid(10, [1, 1]);
+createGrid(40, [4, 3]);
 
 // function to handle resize event
 function handleResize() {
   [vw, vh] = [window.innerWidth, window.innerHeight];
   [vwu, vhu] = [vw / 100, vh / 100];
-  createGrid(10, [1, 1]); // adjust the arguments as per your needs
+  createGrid(40, [4, 3]); // ADJUST THIS TOO
 }
 // add resize event listener
 window.addEventListener('resize', handleResize);

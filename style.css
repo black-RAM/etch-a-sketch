@@ -37,5 +37,5 @@ body {
   display: grid;
 }
 .grid-element {
-  border: 1px solid black;
+  border: 1px solid gainsboro;
 }
