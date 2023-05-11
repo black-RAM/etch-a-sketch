@@ -5,8 +5,7 @@ body{
 body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   /* toy story background styling */
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-image: url("assets/toy-story-cloud.jpg");
   background-size: 400px;
   background-repeat: repeat;
@@ -14,17 +13,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1.5rem;
   box-sizing: border-box;
 }
 /* main etch-a-sketch */
 #etch {
-  width: 90vw;
-  height: 90vh;
-  background-color: hsl(1, 100%, 70%);
   border-radius: 30px;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  background-color: hsl(1, 100%, 70%);
+  padding: 0 1rem 2rem;
 }
 #etch > h1 {
   font-family: 'lobster', Arial, sans-serif;
@@ -33,12 +32,11 @@ body {
   text-align: center;
   margin: 10px;
 }
-#container {
+#grid-container {
   background-color: white;
   width: 95%;
-  height: 70%;
+  min-height: 70%;
   display: grid;
-  grid-template-columns: repeat(16, auto);
 }
 .grid-element {
   border: 1px solid black;
