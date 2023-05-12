@@ -55,9 +55,40 @@ createGrid(40, [4, 3]);
 
 // function to handle resize event
 function handleResize() {
+  // update viewport variables
   [vw, vh] = [window.innerWidth, window.innerHeight];
   [vwu, vhu] = [vw / 100, vh / 100];
-  createGrid(40, [4, 3]); // ADJUST THIS TOO
+  createGrid(40, [4, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
 }
 // add resize event listener
 window.addEventListener('resize', handleResize);
+
+// "hover" effect to color each box that is touched
+{ // block scope to clean up global scope
+  const gridElements = [...document.querySelectorAll('.grid-element')];
+  let isPointerDown = false;
+
+  gridElements.forEach(element => {
+    element.addEventListener('pointerdown', handlePointerDown);
+    element.addEventListener('pointermove', handlePointerMove);
+    element.addEventListener('pointerup', handlePointerUp);
+
+    element.addEventListener('touchstart', handlePointerDown);
+    element.addEventListener('touchmove', handlePointerMove);
+    element.addEventListener('touchend', handlePointerUp);
+  });
+
+  function handlePointerDown() {
+    isPointerDown = true;
+    this.classList.add('selected');
+  }
+  function handlePointerMove(event) {
+    if (isPointerDown) {
+      event.preventDefault();
+      this.classList.add('selected');
+    }
+  }
+  function handlePointerUp() {
+    isPointerDown = false;
+  }
+}

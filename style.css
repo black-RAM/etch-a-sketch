@@ -38,4 +38,10 @@ body {
 }
 .grid-element {
   border: 1px solid gainsboro;
+  transition-property: 'background-color';
+  transition-duration: 0.8s;
+  transition-timing-function: ease;
+}
+.selected {
+  background-color: lightslategray;
 }
