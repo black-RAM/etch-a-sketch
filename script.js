@@ -1,3 +1,4 @@
+const body = document.getElementsByTagName('body')[0];
 // viewport dimensions
 let [vw, vh] = [window.innerWidth, window.innerHeight];
 let [vwu, vhu] = [vw / 100, vh / 100]; // viewport width|height unit
@@ -78,14 +79,39 @@ window.addEventListener('resize', handleResize);
     element.addEventListener('touchend', handlePointerUp);
   });
 
+  // random RGB values
+  function passRGB () {
+    const [r, g, b] = [
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255),
+      Math.floor(Math.random() * 255)
+    ]; // later, try to DRY with Array constructor
+
+    // pass random RGB values as CSS as variables
+    body.style.cssText = `
+    --r: ${r};
+    --g: ${g};
+    --b: ${b}`;
+  };
+  passRGB();
+
+  let useRandom = true; // will be toggled changed by button. False by default.
+
   function handlePointerDown() {
     isPointerDown = true;
-    this.classList.add('selected');
+    if(useRandom) {
+      this.classList.add('random-color');
+    } else {
+      this.classList.add('selected');
+    }
   }
   function handlePointerMove(event) {
     if (isPointerDown) {
-      event.preventDefault();
-      this.classList.add('selected');
+      if(useRandom) {
+        this.classList.add('random-color');
+      } else {
+        this.classList.add('selected');
+      } // DRY this
     }
   }
   function handlePointerUp() {
