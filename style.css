@@ -45,7 +45,3 @@ body {
 .selected {
   background-color: lightslategray;
 }
-.random-color {
-  background-color: rgb(var(--r), var(--g), var(--b));
-  /* these variables will be passed by JS */
-}

@@ -64,8 +64,8 @@ function handleResize() {
 // add resize event listener
 window.addEventListener('resize', handleResize);
 
-// "hover" effect to color each box that is touched
-{ // block scope to clean up global scope
+// drawing effect
+{ // block scope to clean up global
   const gridElements = [...document.querySelectorAll('.grid-element')];
   let isPointerDown = false;
 
@@ -73,47 +73,42 @@ window.addEventListener('resize', handleResize);
     element.addEventListener('pointerdown', handlePointerDown);
     element.addEventListener('pointermove', handlePointerMove);
     element.addEventListener('pointerup', handlePointerUp);
-
+    // for touch-screens
     element.addEventListener('touchstart', handlePointerDown);
     element.addEventListener('touchmove', handlePointerMove);
     element.addEventListener('touchend', handlePointerUp);
   });
 
-  // random RGB values
-  function passRGB () {
-    const [r, g, b] = [
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255)
-    ]; // later, try to DRY with Array constructor
-
-    // pass random RGB values as CSS as variables
-    body.style.cssText = `
-    --r: ${r};
-    --g: ${g};
-    --b: ${b}`;
-  };
-  passRGB();
-
   let useRandom = true; // will be toggled changed by button. False by default.
+
+  function getRandomColor() {
+    const [r, g, b] = [
+      Math.floor(Math.random() * 256),
+      Math.floor(Math.random() * 256),
+      Math.floor(Math.random() * 256)
+    ];
+    return `rgb(${r}, ${g}, ${b})`;
+  }
 
   function handlePointerDown() {
     isPointerDown = true;
-    if(useRandom) {
-      this.classList.add('random-color');
+    if (useRandom) {
+      this.style.backgroundColor = getRandomColor();
     } else {
       this.classList.add('selected');
     }
   }
-  function handlePointerMove(event) {
+
+  function handlePointerMove() {
     if (isPointerDown) {
-      if(useRandom) {
-        this.classList.add('random-color');
+      if (useRandom) {
+        this.style.backgroundColor = getRandomColor();
       } else {
         this.classList.add('selected');
-      } // DRY this
+      }
     }
   }
+
   function handlePointerUp() {
     isPointerDown = false;
   }
