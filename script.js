@@ -78,9 +78,15 @@ window.addEventListener('resize', handleResize);
     element.addEventListener('touchmove', handlePointerMove);
     element.addEventListener('touchend', handlePointerUp);
   });
+  // get chosen pen color from user input
+  let chosenColor = 'lightslategray'; // default color
 
-  let useRandom = true; // will be toggled changed by button. False by default.
-
+  document.getElementById('color').addEventListener('input', function() {
+    chosenColor = this.value; // Update chosenColor when input changes
+  });
+  
+  let useRandom = false; // will be toggled changed by button. False by default.
+  
   function getRandomColor() {
     const [r, g, b] = [
       Math.floor(Math.random() * 256),
@@ -89,27 +95,19 @@ window.addEventListener('resize', handleResize);
     ];
     return `rgb(${r}, ${g}, ${b})`;
   }
-
+  
   function handlePointerDown() {
     isPointerDown = true;
-    if (useRandom) {
-      this.style.backgroundColor = getRandomColor();
-    } else {
-      this.classList.add('selected');
-    }
+    this.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
   }
-
+  
   function handlePointerMove() {
     if (isPointerDown) {
-      if (useRandom) {
-        this.style.backgroundColor = getRandomColor();
-      } else {
-        this.classList.add('selected');
-      }
+      this.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
     }
   }
-
+  
   function handlePointerUp() {
     isPointerDown = false;
-  }
+  }  
 }

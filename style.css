@@ -39,9 +39,6 @@ body {
   transition-duration: 0.8s;
   transition-timing-function: ease;
 }
-.selected {
-  background-color: lightslategray;
-}
 #controls {
   margin-top: 1rem;
 }
