@@ -17,12 +17,29 @@
     <h1>Etch-A-Sketch</h1>
     <div id="grid-container"></div>
     <form id="controls">
-      <label for="color">Color</label>
-      <input type="color" name="color" id="color">
-      <button type="button" id="use-random-button">Random Colors</button>
+      <!-- extra divs for proper grouping when flexbox wraps -->
+      <div>
+        <label for="color">Color</label>
+        <input type="color" name="color" id="color">
+      </div>
+      <div>
+        <button type="button" id="use-random-button">Random Colors</button>
+      </div>
 
-      <label for="res">Resolution: </label>
-      <input type="range" min="2" max="40" value="20" class="slider" id="res">
+      <div>
+        <label for="res">Pixels: </label>
+        <input type="range" min="2" max="40" value="20" class="slider" id="res">
+      </div>
+
+      <select name="ratios" id="ratios">
+        <option value="default">Aspect Ratio</option>
+        <option class="ratio" value="4:3">4 : 3</option>
+        <option class="ratio" value="3:2">3 : 2</option>
+        <option class="ratio" value="16:9">2 : 1</option>
+        <option class="ratio" value="1:1">1 : 1</option>
+      </select>
+
+      <button id="erase">Erase All</button>
     </form>
   </main>
 </body>

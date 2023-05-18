@@ -20,7 +20,7 @@ body {
   flex-flow: column nowrap;
   align-items: center;
   background-color: hsl(1, 100%, 70%);
-  padding: 0 1rem 2rem;
+  padding: 0 1rem 1rem;
 }
 #etch > h1 {
   font-family: 'lobster', Arial, sans-serif;
@@ -42,16 +42,15 @@ body {
 #controls {
   margin-top: 1rem;
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 1rem;
 }
-#controls :where(button, label) {
-  margin-left: 1rem;
-}
-#controls button {
+#controls :where(button, select) {
   background-color: aliceblue;
   font-size: 1rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
+  text-align: center;
   border: none;
   border-radius: 0.5rem;
 }

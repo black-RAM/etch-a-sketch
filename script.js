@@ -14,7 +14,7 @@ function createGrid(res, ratio) {
     grid.removeChild(grid.firstChild);
   }
 
-  // initialized in function scope to avoid reference errors and verbosity
+  // grid width and height values
   let gridWidth = 0;
   let gridHeight = 0;
   // for portrait orientation (like on tablets),
@@ -47,14 +47,19 @@ function createGrid(res, ratio) {
     }
     spaceLeft-=columnWidth;
   }
+  // also set width of control panel, under the grid to same value to line up
+  const controls = document.getElementById('controls')
+  controls.style.width = `${gridWidth}px`;
 }
 
-let chosenRes = 20; // default
+// defaults
+let chosenRes = 20;
+let aspectRatio = [4, 3];
 
 // initial grid creation
-createGrid(chosenRes, [5, 3]);
+createGrid(chosenRes, aspectRatio);
 
-// Adjustment for user choice with a delay
+// Adjustment for user's resolution choice
 let sliderTimeout; // Variable to store the timeout ID for input slider
 document.getElementById('res').addEventListener('input', function () {
   clearTimeout(sliderTimeout); // Clear any existing timeout
@@ -63,20 +68,37 @@ document.getElementById('res').addEventListener('input', function () {
   // Changing at every increment caused the height to be shaky
   sliderTimeout = setTimeout(() => {
     chosenRes = this.value;
-    createGrid(chosenRes, [4, 3]);
+    createGrid(chosenRes, aspectRatio);
   }, 100);
 });
+
+// for user aspect ratio choice
+let options = [...document.querySelectorAll('.ratio')];
+options.forEach(option => {
+  option.addEventListener('click', function () {
+    let chosenRatio = this.innerText;
+    chosenRatio = chosenRatio.split('');
+    chosenRatio = chosenRatio.filter(char => /\d/.test(char));
+    aspectRatio = chosenRatio;
+    createGrid(chosenRes, chosenRatio)
+  })
+})
 
 // function to handle resize event
 function handleResize() {
   // update viewport variables
   [vw, vh] = [window.innerWidth, window.innerHeight];
   [vwu, vhu] = [vw / 100, vh / 100];
-  createGrid(chosenRes, [5, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
+  createGrid(chosenRes, aspectRatio); // re-call createGrid. ADJUST PARAMETERS TOO
 }
 
 // add resize event listener
 window.addEventListener('resize', handleResize);
+
+// clear grid for erase
+document.getElementById('erase').addEventListener('click', () => {
+  createGrid(chosenRes, aspectRatio);
+})
 
 // drawing effect
 const gridContainer = document.getElementById('grid-container');
@@ -90,13 +112,7 @@ gridContainer.addEventListener('touchstart', handlePointerDown);
 gridContainer.addEventListener('touchmove', handlePointerMove);
 gridContainer.addEventListener('touchend', handlePointerUp);
 
-// get chosen pen color from user input
-let chosenColor = 'lightslategray'; // default color
-
-document.getElementById('color').addEventListener('input', function() {
-  chosenColor = this.value; // Update chosenColor when input changes
-});
-
+// for if the user wants randomised colors
 let useRandom = false; 
 const randomButton = document.getElementById('use-random-button');
 randomButton.addEventListener('click', function() {
@@ -108,6 +124,15 @@ function getRandomColor() {
   const [r, g, b] = Array.from({ length: 3 }, () => Math.floor(Math.random() * 256));
   return `rgb(${r}, ${g}, ${b})`;
 }
+
+// IF not, get chosen pen color from user input
+let chosenColor = 'lightslategray'; // default color
+document.getElementById('color').addEventListener('input', function() {
+  chosenColor = this.value; // Update chosenColor when input changes
+  // deactivate use random
+  useRandom = false;
+  randomButton.style.backgroundColor = 'aliceblue';
+});
 
 function handlePointerDown(event) {
   if (event.target.classList.contains('grid-element')) {
