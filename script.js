@@ -22,24 +22,21 @@ function createGrid(res, ratio) {
   if (isPortrait) {
     // manipulate height to achieve desired aspect ratio (rather than going wide and overflowing)
     gridWidth = 90 * vwu;
-    grid.style.width = `${gridWidth}px`;
-    
-    gridHeight = 90 * vwu / w * h;
-    grid.style.minHeight = `${gridHeight}px`;
+    gridHeight = gridWidth / w * h;
   } else {
     // else manipulate width (more convenient as user can see the whole board)
-    gridHeight = 75 * vhu;
-    grid.style.minHeight = `${gridHeight}px`;
-    
-    gridWidth = 75 * vhu / h * w;
-    grid.style.width = `${gridWidth}px`;
+    gridHeight = 75 * vhu;    
+    gridWidth = gridHeight / h * w;
   }
+  grid.style.width = `${gridWidth}px`;
+  grid.style.minHeight = `${gridHeight}px`;
   
   const columnWidth = gridWidth / res;
   grid.style.gridTemplateColumns = `repeat(${res}, ${columnWidth}px)`;
   
   // loop to actually create the grid
   let spaceLeft = gridHeight;
+
   while(spaceLeft > 0) {
     // create rows
     for (let i = 0; i < res; i++) {
@@ -51,70 +48,75 @@ function createGrid(res, ratio) {
     spaceLeft-=columnWidth;
   }
 }
-// get grid "resolution" value
+
 let chosenRes = 20; // default
+
 // initial grid creation
-createGrid(chosenRes, [4, 3]);
-// adjustment for user choice
-document.getElementById('res').addEventListener('input', function() {
-  chosenRes = this.value;
-  createGrid(chosenRes, [4, 3]);
-})
+createGrid(chosenRes, [5, 3]);
+
+// Adjustment for user choice with a delay
+let sliderTimeout; // Variable to store the timeout ID for input slider
+document.getElementById('res').addEventListener('input', function () {
+  clearTimeout(sliderTimeout); // Clear any existing timeout
+  
+  // Timeout to change only once, and not with every increment of the slider.
+  // Changing at every increment caused the height to be shaky
+  sliderTimeout = setTimeout(() => {
+    chosenRes = this.value;
+    createGrid(chosenRes, [4, 3]);
+  }, 100);
+});
 
 // function to handle resize event
 function handleResize() {
   // update viewport variables
   [vw, vh] = [window.innerWidth, window.innerHeight];
   [vwu, vhu] = [vw / 100, vh / 100];
-  createGrid(chosenRes, [4, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
+  createGrid(chosenRes, [5, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
 }
+
 // add resize event listener
 window.addEventListener('resize', handleResize);
 
 // drawing effect
-{ // block scope to clean up global
-  const gridElements = [...document.querySelectorAll('.grid-element')];
-  let isPointerDown = false;
+const gridContainer = document.getElementById('grid-container');
+let isPointerDown = false;
 
-  gridElements.forEach(element => {
-    element.addEventListener('pointerdown', handlePointerDown);
-    element.addEventListener('pointermove', handlePointerMove);
-    element.addEventListener('pointerup', handlePointerUp);
-    // for touch-screens
-    element.addEventListener('touchstart', handlePointerDown);
-    element.addEventListener('touchmove', handlePointerMove);
-    element.addEventListener('touchend', handlePointerUp);
-  });
-  // get chosen pen color from user input
-  let chosenColor = 'lightslategray'; // default color
+gridContainer.addEventListener('pointerdown', handlePointerDown);
+gridContainer.addEventListener('pointermove', handlePointerMove);
+gridContainer.addEventListener('pointerup', handlePointerUp);
+// for touch-screens
+gridContainer.addEventListener('touchstart', handlePointerDown);
+gridContainer.addEventListener('touchmove', handlePointerMove);
+gridContainer.addEventListener('touchend', handlePointerUp);
 
-  document.getElementById('color').addEventListener('input', function() {
-    chosenColor = this.value; // Update chosenColor when input changes
-  });
-  
-  let useRandom = false; // will be toggled changed by button. False by default.
-  
-  function getRandomColor() {
-    const [r, g, b] = [
-      Math.floor(Math.random() * 256),
-      Math.floor(Math.random() * 256),
-      Math.floor(Math.random() * 256)
-    ];
-    return `rgb(${r}, ${g}, ${b})`;
-  }
-  
-  function handlePointerDown() {
-    isPointerDown = true;
-    this.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
-  }
-  
-  function handlePointerMove() {
-    if (isPointerDown) {
-      this.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
-    }
-  }
-  
-  function handlePointerUp() {
-    isPointerDown = false;
-  }  
+// get chosen pen color from user input
+let chosenColor = 'lightslategray'; // default color
+
+document.getElementById('color').addEventListener('input', function() {
+  chosenColor = this.value; // Update chosenColor when input changes
+});
+
+let useRandom = false; // will be toggled changed by button. False by default.
+
+function getRandomColor() {
+  const [r, g, b] = Array.from({ length: 3 }, () => Math.floor(Math.random() * 256));
+  return `rgb(${r}, ${g}, ${b})`;
 }
+
+function handlePointerDown(event) {
+  if (event.target.classList.contains('grid-element')) {
+    isPointerDown = true;
+    event.target.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
+  }
+}
+
+function handlePointerMove(event) {
+  if (isPointerDown && event.target.classList.contains('grid-element')) {
+    event.target.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
+  }
+}
+
+function handlePointerUp() {
+  isPointerDown = false;
+};
