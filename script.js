@@ -97,7 +97,12 @@ document.getElementById('color').addEventListener('input', function() {
   chosenColor = this.value; // Update chosenColor when input changes
 });
 
-let useRandom = false; // will be toggled changed by button. False by default.
+let useRandom = false; 
+const randomButton = document.getElementById('use-random-button');
+randomButton.addEventListener('click', function() {
+  useRandom = !useRandom; // Toggle the value of useRandom
+  this.style.backgroundColor = useRandom ? 'hsl(208, 90%, 90%)' : 'aliceblue';
+});
 
 function getRandomColor() {
   const [r, g, b] = Array.from({ length: 3 }, () => Math.floor(Math.random() * 256));

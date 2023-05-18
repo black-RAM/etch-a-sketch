@@ -43,8 +43,15 @@ body {
   margin-top: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 5px;
 }
-#controls input {
-  margin-right: 1rem;
+#controls :where(button, label) {
+  margin-left: 1rem;
+}
+#controls button {
+  background-color: aliceblue;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
 }

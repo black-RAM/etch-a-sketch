@@ -16,9 +16,10 @@
   <main id="etch">
     <h1>Etch-A-Sketch</h1>
     <div id="grid-container"></div>
-    <form action="POST" id="controls">
-      <label for="color">Color: </label>
+    <form id="controls">
+      <label for="color">Color</label>
       <input type="color" name="color" id="color">
+      <button type="button" id="use-random-button">Random Colors</button>
 
       <label for="res">Resolution: </label>
       <input type="range" min="2" max="40" value="20" class="slider" id="res">
