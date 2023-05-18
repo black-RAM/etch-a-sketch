@@ -96,7 +96,7 @@ function handleResize() {
 window.addEventListener('resize', handleResize);
 
 // clear grid for erase
-document.getElementById('erase').addEventListener('click', () => {
+document.getElementById('erase-all').addEventListener('click', () => {
   createGrid(chosenRes, aspectRatio);
 })
 
@@ -125,7 +125,7 @@ function getRandomColor() {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-// IF not, get chosen pen color from user input
+// If not get chosen pen color from user input
 let chosenColor = 'lightslategray'; // default color
 document.getElementById('color').addEventListener('input', function() {
   chosenColor = this.value; // Update chosenColor when input changes
@@ -134,19 +134,34 @@ document.getElementById('color').addEventListener('input', function() {
   randomButton.style.backgroundColor = 'aliceblue';
 });
 
+// Eraser boolean
+let isErasing = false;
+
 function handlePointerDown(event) {
   if (event.target.classList.contains('grid-element')) {
     isPointerDown = true;
-    event.target.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
+    event.target.style.backgroundColor = 
+      isErasing ? 'white' : 
+      useRandom ? getRandomColor() 
+      : chosenColor; 
   }
 }
 
 function handlePointerMove(event) {
   if (isPointerDown && event.target.classList.contains('grid-element')) {
-    event.target.style.backgroundColor = useRandom ? getRandomColor() : chosenColor; 
+    event.target.style.backgroundColor = 
+      isErasing ? 'white' : 
+      useRandom ? getRandomColor() 
+      : chosenColor; 
   }
 }
 
 function handlePointerUp() {
   isPointerDown = false;
 };
+
+// Eraser
+document.getElementById('eraser-button').addEventListener('click', function() {
+  isErasing = !isErasing; // Toggle eraser mode
+  this.style.backgroundColor = isErasing ? 'hsl(208, 90%, 90%)' : 'aliceblue';
+});
