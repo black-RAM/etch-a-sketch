@@ -1,8 +1,5 @@
-/* revert pesky margins */
-body{
-  margin: 0;
-}
 body {
+  margin: 0;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   /* toy story background styling */
   min-height: 100vh;
@@ -44,4 +41,7 @@ body {
 }
 .selected {
   background-color: lightslategray;
+}
+#controls {
+  margin-top: 1rem;
 }
