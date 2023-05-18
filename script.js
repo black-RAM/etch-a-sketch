@@ -51,15 +51,22 @@ function createGrid(res, ratio) {
     spaceLeft-=columnWidth;
   }
 }
+// get grid "resolution" value
+let chosenRes = 20; // default
 // initial grid creation
-createGrid(40, [4, 3]);
+createGrid(chosenRes, [4, 3]);
+// adjustment for user choice
+document.getElementById('res').addEventListener('input', function() {
+  chosenRes = this.value;
+  createGrid(chosenRes, [4, 3]);
+})
 
 // function to handle resize event
 function handleResize() {
   // update viewport variables
   [vw, vh] = [window.innerWidth, window.innerHeight];
   [vwu, vhu] = [vw / 100, vh / 100];
-  createGrid(40, [4, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
+  createGrid(chosenRes, [4, 3]); // re-call createGrid. ADJUST PARAMETERS TOO
 }
 // add resize event listener
 window.addEventListener('resize', handleResize);
