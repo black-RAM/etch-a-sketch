@@ -1,7 +1,12 @@
 const body = document.getElementsByTagName('body')[0];
+
 // viewport dimensions
 let [vw, vh] = [window.innerWidth, window.innerHeight];
 let [vwu, vhu] = [vw / 100, vh / 100]; // viewport width|height unit
+
+// grid width and height values
+let gridWidth = 0;
+let gridHeight = 0;
 
 // grid creation function
 function createGrid(res, ratio) {
@@ -14,9 +19,6 @@ function createGrid(res, ratio) {
     grid.removeChild(grid.firstChild);
   }
 
-  // grid width and height values
-  let gridWidth = 0;
-  let gridHeight = 0;
   // for portrait orientation (like on tablets),
   let isPortrait = vw < vh;
   if (isPortrait) {
@@ -165,3 +167,29 @@ document.getElementById('eraser-button').addEventListener('click', function() {
   isErasing = !isErasing; // Toggle eraser mode
   this.style.backgroundColor = isErasing ? 'hsl(208, 90%, 90%)' : 'aliceblue';
 });
+
+// Function to download the drawing
+function downloadDrawing() {
+  const canvas = document.createElement('canvas');
+  canvas.width = gridWidth;
+  canvas.height = gridHeight;
+  const context = canvas.getContext('2d');
+
+  const elements = [...document.getElementsByClassName('grid-element')];
+  elements.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+    let color = element.style.backgroundColor;
+    color = color? color : 'white'; // if color is truthy, keep it, else make it white
+    context.fillStyle = color;
+    context.fillRect(rect.left, rect.top, rect.width, rect.height);
+  });
+
+  const dataURL = canvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.download = 'drawing.png';
+  link.dispatchEvent(new MouseEvent('click'));
+}
+
+// Add a click event listener to the download button
+document.getElementById('download-button').addEventListener('click', downloadDrawing);
